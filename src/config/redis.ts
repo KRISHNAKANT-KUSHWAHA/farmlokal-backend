@@ -14,6 +14,7 @@
 // });
 
 // export default redis;
+
 import Redis from "ioredis";
 
 const redisUrl = process.env.REDIS_URL;
@@ -23,10 +24,10 @@ if (!redisUrl) {
 }
 
 const redis = new Redis(redisUrl, {
-  lazyConnect: true,        // 🔑 KEY FIX
-  maxRetriesPerRequest: 3,
+  lazyConnect: true,
+  enableOfflineQueue: true,   // 🔑 queue commands until Redis wakes
   retryStrategy(times) {
-    return Math.min(times * 200, 2000);
+    return Math.min(times * 300, 3000); // keep retrying calmly
   },
 });
 
@@ -34,8 +35,12 @@ redis.on("connect", () => {
   console.log("✅ Redis connected");
 });
 
-redis.on("error", (err) => {
-  console.warn("⚠️ Redis not ready yet");
+redis.on("ready", () => {
+  console.log("🟢 Redis ready");
+});
+
+redis.on("error", () => {
+  console.warn("⚠️ Redis warming up (normal on free tier)");
 });
 
 export default redis;
