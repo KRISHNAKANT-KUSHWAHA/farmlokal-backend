@@ -1,98 +1,290 @@
-# FarmLokal Backend Assignment
+🌾 FarmLokal Backend Assignment
 
-## Overview
-This project is a backend service built for **FarmLokal**, a hyperlocal marketplace connecting households directly with local farmers and producers.  
-The system is designed with **performance, scalability, and reliability** as top priorities.
+A scalable, production-ready backend service built for FarmLokal, a hyperlocal marketplace that connects households directly with local farmers and producers.
+This project focuses on performance, reliability, real-world system design, and graceful failure handling, as required by the assignment.
 
----
+🚀 Live Deployment
 
-## Tech Stack
-- Node.js (TypeScript)
-- Fastify
-- MySQL (Dockerized)
-- Redis (Dockerized)
-- Docker
+Backend Base URL (Render)
 
----
+https://farmlokal-backend-9ftd.onrender.com
 
-## Architecture
-- Modular folder structure (routes, controllers, services)
-- Clear separation of concerns
-- Redis used for caching, rate limiting, and token storage
-- MySQL connection pooling for efficient database access
+🔗 API Endpoints (Live)
+🛍 Products API
+GET /products
+GET /products?limit=10
+GET /products?search=Product
+GET /products?category=fruits
+GET /products?category=vegetables
+GET /products?sort=price&order=asc
+GET /products?category=vegetables&sort=price&order=asc&limit=5
 
----
+📊 Metrics
+GET /metrics
 
-## Authentication
-- OAuth2 Client Credentials flow
-- Access tokens fetched from provider
-- Tokens cached in Redis
-- Automatic refresh on expiry
-- Concurrency-safe token fetching to avoid redundant calls
-
----
-
-## External API Integrations
-
-### API A (Synchronous External API)
-- Timeout handling
-- Retry with exponential backoff
-- Graceful failure handling
-
-### API B (Webhook / Callback-based API)
-- Callback endpoint implementation
-- Redis-backed idempotency
-- Safe retry & duplicate event handling
-
----
-
-## Product Listing API
-
-### Endpoint
+🔁 Webhook
+POST /webhook
 
 
-### Features
-- Cursor-based pagination
-- Filtering by category and price range
-- Sorting support
-- Optimized for large datasets (1M+ records simulation)
-- Indexed MySQL queries
-- Redis caching with query-based cache keys (TTL: 60s)
+Headers
 
----
+x-event-id: unique-event-id
+Content-Type: application/json
 
-## Performance Optimizations
-- Redis response caching
-- MySQL indexes
-- Connection pooling
-- Rate limiting (100 requests per minute per IP)
 
----
+Body
 
-## Reliability
-- Redis-based rate limiting
-- External API retries with exponential backoff
-- Webhook idempotency using Redis
-- Graceful degradation on external API failures
+{
+  "event": "order.updated",
+  "id": 123
+}
 
----
+🛠 Tech Stack
 
-## Setup Instructions
+Node.js + TypeScript
 
-### Prerequisites
-- Node.js
-- Docker
+Fastify
 
----
+MySQL (Aiven Cloud)
 
-### Run MySQL
-```bash
-docker run -d --name farmlokal-mysql -p 3307:3306 \
-  -e MYSQL_ROOT_PASSWORD=root \
-  -e MYSQL_DATABASE=farmlokal mysql:8
+Redis (Render Key-Value Store)
 
-docker run -d --name farmlokal-redis -p 6379:6379 redis:7
+ioredis
 
+Pino Logger
+
+Rate Limiting
+
+Docker (optional)
+
+Render (Deployment)
+
+🧱 Architecture Overview
+
+Modular folder structure (routes, controllers, services)
+
+Clear separation of concerns
+
+Centralized error handling
+
+Redis used as a best-effort cache
+
+MySQL connection pooling
+
+Designed to handle large datasets (1M+ records)
+
+🔐 Authentication
+
+OAuth2 Client Credentials Flow (mock provider)
+
+Access tokens fetched from provider
+
+Tokens cached in Redis
+
+Automatic token refresh
+
+Concurrency-safe token fetching (prevents duplicate token requests)
+
+🌐 External API Integrations
+API A – Synchronous API
+
+Timeout handling
+
+Retries with exponential backoff
+
+Graceful failure handling
+
+API B – Webhook / Callback API
+
+Webhook endpoint implementation
+
+Redis-backed idempotency using x-event-id
+
+Safe retries and duplicate event protection
+
+🛍 Product Listing API
+Endpoint
+GET /products
+
+Features
+
+Pagination
+
+Sorting (price, name)
+
+Searching (name / description)
+
+Filtering (category)
+
+Optimized SQL queries
+
+Indexed MySQL tables
+
+Redis caching (TTL: 60 seconds)
+
+Example Request
+GET /products?category=vegetables&sort=price&order=asc&limit=5
+
+📊 Metrics API
+Endpoint
+GET /metrics
+
+Example Response
+{
+  "uptime": 123.45,
+  "memory": {
+    "rss": 12345678,
+    "heapTotal": 9876543,
+    "heapUsed": 8765432
+  },
+  "timestamp": "2026-02-06T10:53:16.000Z"
+}
+
+🔁 Webhook Idempotency
+
+Duplicate webhook events are detected using Redis
+
+Events with the same x-event-id are ignored
+
+Ensures safe retries and exactly-once processing
+
+⚡ Performance Optimizations
+
+Redis response caching
+
+Query-based cache keys
+
+MySQL indexes
+
+Connection pooling
+
+Rate limiting (per IP)
+
+Minimal database queries per request
+
+🛡 Reliability & Fault Tolerance
+
+Redis used as non-blocking cache
+
+Graceful fallback to MySQL when Redis is unavailable
+
+External API retries with backoff
+
+Webhook idempotency
+
+Structured logging for observability
+
+⚠ Redis Availability Note (Important)
+
+Redis is integrated for caching, rate limiting, and idempotency.
+
+On Render Free Key-Value, Redis instances may:
+
+Cold-start
+
+Temporarily refuse connections
+
+The application is designed to gracefully degrade:
+
+Redis failures do not crash the API
+
+System automatically falls back to MySQL
+
+Ensures high availability in real-world production scenarios
+
+⚙ Environment Variables
+Local Development
+PORT=3000
+
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_USER=root
+MYSQL_PASSWORD=your_password
+MYSQL_DB=farmlokal
+
+REDIS_HOST=localhost
+REDIS_PORT=6379
+
+OAUTH_URL=https://mock-oauth.com/token
+OAUTH_CLIENT_ID=client123
+OAUTH_CLIENT_SECRET=secret123
+
+Production (Render + Aiven MySQL)
+PORT=3000
+
+MYSQL_HOST=your-aiven-host
+MYSQL_PORT=your-aiven-port
+MYSQL_USER=your-aiven-user
+MYSQL_PASSWORD=your-aiven-password
+MYSQL_DB=defaultdb
+
+REDIS_URL=redis://render-internal-redis-url:6379
+
+OAUTH_URL=https://mock-oauth.com/token
+OAUTH_CLIENT_ID=client123
+OAUTH_CLIENT_SECRET=secret123
+
+📁 Project Structure
+src/
+ ├── config/
+ │   ├── db.ts
+ │   ├── redis.ts
+ │   └── logger.ts
+ ├── modules/
+ │   ├── products/
+ │   ├── webhook/
+ │   └── auth/
+ ├── middlewares/
+ ├── routes/
+ ├── app.ts
+ └── server.ts
+
+🧪 Local Setup
+git clone <your-github-repo>
+cd farmlokal-backend
 npm install
 npm run dev
 
+
+Server runs at:
+
+http://localhost:3000
+
+🐳 Docker (Optional)
+docker-compose up
+
+🚀 Deployment
+
+Backend: Render
+
+Database: Aiven Cloud MySQL
+
+Cache: Render Key-Value (Redis)
+
+Render Commands
+
+Build
+
+npm install && npm run build
+
+
+Start
+
+node dist/server.js
+
+📌 Trade-offs
+
+Mock OAuth provider used for simplicity
+
+Simple cache invalidation strategy
+
+Redis free-tier cold start handled via graceful degradation
+
+👨‍💻 Author
+
+Krishnakant Kushwaha
+Backend Engineering Assignment – FarmLokal
+
+📄 License
+
+MIT License
