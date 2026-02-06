@@ -1,7 +1,10 @@
 🌾 FarmLokal Backend Assignment
 
-A scalable, production-ready backend service built for FarmLokal, a hyperlocal marketplace that connects households directly with local farmers and producers.
-This project focuses on performance, reliability, real-world system design, and graceful failure handling, as required by the assignment.
+A scalable, production-ready backend service built for FarmLokal, a hyperlocal marketplace connecting households directly with local farmers and producers.
+
+This project focuses on performance optimization, reliability, real-world system design, and graceful failure handling, exactly as required by the assignment.
+
+---
 
 🚀 Live Deployment
 
@@ -9,7 +12,7 @@ Backend Base URL (Render)
 
 https://farmlokal-backend-9ftd.onrender.com
 
-🔗 API Endpoints (Live)
+🔗 Live API Endpoints
 🛍 Products API
 GET /products
 GET /products?limit=10
@@ -19,20 +22,22 @@ GET /products?category=vegetables
 GET /products?sort=price&order=asc
 GET /products?category=vegetables&sort=price&order=asc&limit=5
 
-📊 Metrics
+---
+
+📊 Metrics API
 GET /metrics
 
-🔁 Webhook
+🔁 Webhook API
 POST /webhook
 
 
-Headers
+Required Headers
 
 x-event-id: unique-event-id
 Content-Type: application/json
 
 
-Body
+Sample Body
 
 {
   "event": "order.updated",
@@ -81,9 +86,9 @@ Access tokens fetched from provider
 
 Tokens cached in Redis
 
-Automatic token refresh
+Automatic token refresh on expiry
 
-Concurrency-safe token fetching (prevents duplicate token requests)
+Concurrency-safe token fetching (prevents duplicate requests)
 
 🌐 External API Integrations
 API A – Synchronous API
@@ -100,7 +105,7 @@ Webhook endpoint implementation
 
 Redis-backed idempotency using x-event-id
 
-Safe retries and duplicate event protection
+Safe retries and duplicate event handling
 
 🛍 Product Listing API
 Endpoint
@@ -123,13 +128,16 @@ Indexed MySQL tables
 Redis caching (TTL: 60 seconds)
 
 Example Request
+
 GET /products?category=vegetables&sort=price&order=asc&limit=5
 
 📊 Metrics API
 Endpoint
 GET /metrics
 
+
 Example Response
+
 {
   "uptime": 123.45,
   "memory": {
@@ -142,7 +150,7 @@ Example Response
 
 🔁 Webhook Idempotency
 
-Duplicate webhook events are detected using Redis
+Duplicate webhook events detected using Redis
 
 Events with the same x-event-id are ignored
 
@@ -164,7 +172,7 @@ Minimal database queries per request
 
 🛡 Reliability & Fault Tolerance
 
-Redis used as non-blocking cache
+Redis used as a non-blocking cache
 
 Graceful fallback to MySQL when Redis is unavailable
 
@@ -174,7 +182,7 @@ Webhook idempotency
 
 Structured logging for observability
 
-⚠ Redis Availability Note (Important)
+⚠ Redis Availability Note
 
 Redis is integrated for caching, rate limiting, and idempotency.
 
