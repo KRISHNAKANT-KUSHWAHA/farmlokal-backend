@@ -6,7 +6,8 @@ This project focuses on performance optimization, reliability, real-world system
 
 ---
 
-🚀 Live Deployment
+```
+## 🚀 Live Deployment
 
 Backend Base URL (Render)
 
@@ -21,7 +22,7 @@ GET /products?category=fruits
 GET /products?category=vegetables
 GET /products?sort=price&order=asc
 GET /products?category=vegetables&sort=price&order=asc&limit=5
-
+```
 ---
 
 📊 Metrics API
