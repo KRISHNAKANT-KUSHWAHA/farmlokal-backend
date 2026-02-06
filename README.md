@@ -7,7 +7,7 @@ This project focuses on performance optimization, reliability, real-world system
 ---
 
 ```
-## 🚀 Live Deployment
+🚀 Live Deployment
 
 Backend Base URL (Render)
 
@@ -28,15 +28,16 @@ GET /products?category=vegetables&sort=price&order=asc&limit=5
 📊 Metrics API
 GET /metrics
 
+---
 🔁 Webhook API
 POST /webhook
-
+---
 
 Required Headers
 
 x-event-id: unique-event-id
 Content-Type: application/json
-
+---
 
 Sample Body
 
@@ -46,8 +47,8 @@ Sample Body
 }
 
 ---
-
-##🛠 Tech Stack
+```
+🛠 Tech Stack
 
 Node.js + TypeScript
 
@@ -66,7 +67,9 @@ Rate Limiting
 Docker (optional)
 
 Render (Deployment)
-
+```
+---
+```
 🧱 Architecture Overview
 
 Modular folder structure (routes, controllers, services)
@@ -80,7 +83,9 @@ Redis used as a best-effort cache
 MySQL connection pooling
 
 Designed to handle large datasets (1M+ records)
-
+```
+---
+```
 🔐 Authentication
 
 OAuth2 Client Credentials Flow (mock provider)
@@ -92,7 +97,8 @@ Tokens cached in Redis
 Automatic token refresh on expiry
 
 Concurrency-safe token fetching (prevents duplicate requests)
-
+```
+---
 🌐 External API Integrations
 API A – Synchronous API
 
@@ -101,6 +107,7 @@ Timeout handling
 Retries with exponential backoff
 
 Graceful failure handling
+---
 
 API B – Webhook / Callback API
 
@@ -110,6 +117,8 @@ Redis-backed idempotency using x-event-id
 
 Safe retries and duplicate event handling
 
+---
+```
 🛍 Product Listing API
 Endpoint
 GET /products
@@ -133,7 +142,8 @@ Redis caching (TTL: 60 seconds)
 Example Request
 
 GET /products?category=vegetables&sort=price&order=asc&limit=5
-
+```
+---
 📊 Metrics API
 Endpoint
 GET /metrics
@@ -150,7 +160,7 @@ Example Response
   },
   "timestamp": "2026-02-06T10:53:16.000Z"
 }
-
+---
 🔁 Webhook Idempotency
 
 Duplicate webhook events detected using Redis
@@ -159,6 +169,7 @@ Events with the same x-event-id are ignored
 
 Ensures safe retries and exactly-once processing
 
+---
 ⚡ Performance Optimizations
 
 Redis response caching
@@ -173,6 +184,7 @@ Rate limiting (per IP)
 
 Minimal database queries per request
 
+---
 🛡 Reliability & Fault Tolerance
 
 Redis used as a non-blocking cache
@@ -185,6 +197,7 @@ Webhook idempotency
 
 Structured logging for observability
 
+---
 ⚠ Redis Availability Note
 
 Redis is integrated for caching, rate limiting, and idempotency.
@@ -203,6 +216,7 @@ System automatically falls back to MySQL
 
 Ensures high availability in real-world production scenarios
 
+---
 ⚙ Environment Variables
 Local Development
 PORT=3000
@@ -229,8 +243,10 @@ MYSQL_USER=your-aiven-user
 MYSQL_PASSWORD=your-aiven-password
 MYSQL_DB=defaultdb
 
+---
 REDIS_URL=redis://render-internal-redis-url:6379
 
+---
 OAUTH_URL=https://mock-oauth.com/token
 OAUTH_CLIENT_ID=client123
 OAUTH_CLIENT_SECRET=secret123
