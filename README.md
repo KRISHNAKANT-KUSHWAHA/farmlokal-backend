@@ -251,6 +251,8 @@ OAUTH_URL=https://mock-oauth.com/token
 OAUTH_CLIENT_ID=client123
 OAUTH_CLIENT_SECRET=secret123
 
+---
+
 📁 Project Structure
 src/
  ├── config/
@@ -266,19 +268,24 @@ src/
  ├── app.ts
  └── server.ts
 
+---
 🧪 Local Setup
 git clone <your-github-repo>
 cd farmlokal-backend
 npm install
 npm run dev
 
+---
 
 Server runs at:
 
 http://localhost:3000
 
+---
 🐳 Docker (Optional)
 docker-compose up
+
+---
 
 🚀 Deployment
 
@@ -295,10 +302,11 @@ Build
 npm install && npm run build
 
 
+---
 Start
 
 node dist/server.js
-
+---
 📌 Trade-offs
 
 Mock OAuth provider used for simplicity
@@ -306,12 +314,12 @@ Mock OAuth provider used for simplicity
 Simple cache invalidation strategy
 
 Redis free-tier cold start handled via graceful degradation
-
+---
 👨‍💻 Author
 
 Krishnakant Kushwaha
 Backend Engineering Assignment – FarmLokal
-
+---
 📄 License
 
 MIT License
