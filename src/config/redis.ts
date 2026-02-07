@@ -61,35 +61,6 @@
 
 // export default redis;
 
-// import Redis from "ioredis";
-
-// const redisUrl = process.env.REDIS_URL;
-
-// let redis: Redis | null = null;
-
-// if (redisUrl) {
-//   redis = new Redis(redisUrl, {
-//     lazyConnect: true,
-//     enableOfflineQueue: false, // ❌ IMPORTANT
-//     maxRetriesPerRequest: 1,   // ❌ IMPORTANT
-//     retryStrategy(times) {
-//       return Math.min(times * 200, 1000);
-//     },
-//   });
-
-//   redis.on("ready", () => {
-//     console.log("🟢 Redis ready");
-//   });
-
-//   redis.on("error", () => {
-//     console.warn("⚠️ Redis unavailable, continuing without cache");
-//   });
-// } else {
-//   console.warn("⚠️ REDIS_URL not set, running without Redis");
-// }
-
-// export default redis;
-
 import Redis from "ioredis";
 
 const redisUrl = process.env.REDIS_URL;
@@ -99,8 +70,11 @@ let redis: Redis | null = null;
 if (redisUrl) {
   redis = new Redis(redisUrl, {
     lazyConnect: true,
-    enableOfflineQueue: false,
-    maxRetriesPerRequest: 1,
+    enableOfflineQueue: false, // ❌ IMPORTANT
+    maxRetriesPerRequest: 1,   // ❌ IMPORTANT
+    retryStrategy(times) {
+      return Math.min(times * 200, 1000);
+    },
   });
 
   redis.on("ready", () => {
@@ -115,6 +89,34 @@ if (redisUrl) {
 }
 
 export default redis;
+
+
+
+// import Redis from "ioredis";
+
+// const redisUrl = process.env.REDIS_URL;
+
+// let redis: Redis | null = null;
+
+// if (redisUrl) {
+//   redis = new Redis(redisUrl, {
+//     lazyConnect: true,
+//     enableOfflineQueue: false,
+//     maxRetriesPerRequest: 1,
+//   });
+
+//   redis.on("ready", () => {
+//     console.log("🟢 Redis ready");
+//   });
+
+//   redis.on("error", () => {
+//     console.warn("⚠️ Redis unavailable, continuing without cache");
+//   });
+// } else {
+//   console.warn("⚠️ REDIS_URL not set, running without Redis");
+// }
+
+// export default redis;
 
 
 
